@@ -1,0 +1,61 @@
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version '3.3.5'
+    id 'io.spring.dependency-management' version '1.1.6'
+    id 'com.diffplug.spotless' version '7.0.0.BETA4'
+}
+
+group = 'com.example'
+version = '0.0.1-SNAPSHOT'
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21) // 필요에 따라 버전 조정 가능
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-validation'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation group: 'com.google.code.gson', name: 'gson', version: '2.8.9'
+    compileOnly 'org.projectlombok:lombok'
+    runtimeOnly 'com.h2database:h2'
+    runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
+
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+    implementation('org.projectlombok:lombok')
+    annotationProcessor('org.projectlombok:lombok')
+
+    testImplementation('org.projectlombok:lombok')
+    testAnnotationProcessor('org.projectlombok:lombok')
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}
+
+spotless {
+    // optional: limit format enforcement to just the files changed by this feature branch
+    //ratchetFrom 'origin/main'
+
+    // format 'misc', {
+    //   // define the files to apply `misc` to
+    //   target '*.gradle', '.gitattributes', '.gitignore'
+
+    //   // define the steps to apply to those files
+    //   trimTrailingWhitespace()
+    //   indentWithTabs() // or spaces. Takes an integer argument if you don't like 4
+    //   endWithNewline()
+    // }
+    java {
+        palantirJavaFormat()
+
+        importOrder('java', 'jakarta', 'org', 'com', '', 'com.example')
+    }
+}
